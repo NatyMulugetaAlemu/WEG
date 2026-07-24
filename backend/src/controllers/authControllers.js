@@ -52,8 +52,23 @@ export const signup=async(req,res)=>{
   }
 }
 
-export const login=(req,res)=>{
-    res.send("login route")
+export const login=async(req,res)=>{
+   const{email,password}=req.body
+   try {
+     if(!username || !email || !password){
+       return res.status(400).json({message:"All Fields Are Required"})
+    }
+     const user=await User.findOne({email})
+
+     if(!user){
+       return res.status(400).json({message:"Invalid Credentials"})
+     }
+
+
+     
+   } catch (error) {
+    
+   }
 }
 
 export const logout=(req,res)=>{
