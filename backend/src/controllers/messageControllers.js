@@ -44,18 +44,18 @@ export const sendMessages = async (req, res) => {
             imageUrl = uploadResponse.secure_Url
         }
 
-        const newMessage=new Message({
+        const newMessage = new Message({
             userToChatId,
             LoggedInUserId,
             text,
-            image:imageUrl,
+            image: imageUrl,
         })
 
         await newMessage.save()
 
-        
-
+        res.status(200).json(newMessage)
     } catch (error) {
-
+        console.log("Error in sendMessages controller", error.message)
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
