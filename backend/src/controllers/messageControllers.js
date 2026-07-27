@@ -20,8 +20,8 @@ export const getMessages = async (req, res) => {
         const LoggedInUserId = req.user._id
         const messages = await Message.find({
             $or: [
-                { senderId: LoggedInUserId , receiverId: userToChatId },
-                { senderId: userToChatId, receiverId:  LoggedInUserId  }
+                { senderId: LoggedInUserId, receiverId: userToChatId },
+                { senderId: userToChatId, receiverId: LoggedInUserId }
             ]
         })
 
@@ -29,5 +29,33 @@ export const getMessages = async (req, res) => {
     } catch (error) {
         console.log("Error in getUsers4Sidebarcontroller", error.message)
         res.status(500).json({ message: "Internal Server Error" })
+    }
+}
+
+export const sendMessages = async (req, res) => {
+    try {
+        const { text, image } = req.body
+        const { id: userToChatId } = req.params
+        const LoggedInUserId = req.user._id
+
+        let imageUrl;
+        if (image) {
+            const uploadResponse = await cloudinary.uploader.upload(image)
+            imageUrl = uploadResponse.secure_Url
+        }
+
+        const newMessage=new Message({
+            userToChatId,
+            LoggedInUserId,
+            text,
+            image:imageUrl,
+        })
+
+        await newMessage.save()
+
+        
+
+    } catch (error) {
+
     }
 }
