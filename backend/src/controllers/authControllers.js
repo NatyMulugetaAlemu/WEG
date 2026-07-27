@@ -1,6 +1,7 @@
 import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../lib/utils.js"
+import cloudinary from "../lib/cloudinary.js"
 
 export const signup = async (req, res) => {
   const { username, email, password } = req.body
@@ -70,14 +71,14 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid Credentials" })
     }
 
-    generateToken(user._id,res)
+    generateToken(user._id, res)
 
     res.status(200).json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        profilePic: user.profilePic
-      })
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      profilePic: user.profilePic
+    })
   } catch (error) {
     console.log("Error in login controller", error.message)
     res.status(500).json({ message: "Internal Server Error" })
@@ -85,15 +86,31 @@ export const login = async (req, res) => {
 }
 
 export const logout = (req, res) => {
- try {
-  res.cookie("jwt","",{maxAge:0})
-   return res.status(200).json({ message: "Logged Out Sucessfully" })
- } catch (error) {
-   console.log("Error in logout controller", error.message)
+  try {
+    res.cookie("jwt", "", { maxAge: 0 })
+    return res.status(200).json({ message: "Logged Out Sucessfully" })
+  } catch (error) {
+    console.log("Error in logout controller", error.message)
     res.status(500).json({ message: "Internal Server Error" })
- }
+  }
 }
 
-export const updateProfile = (req, res) => {
-  
+export const updateProfile = async (req, res) => {
+  try {
+    const { profilePic } = req.body
+    const userId = req.user._id
+
+    if (!profilePic) {
+      return res.status(400).json({ message: "ProfilePic is Required" })
+    }
+
+    const uploadResponse = await cloudinary.uploader.upload(profilePic)
+    const updatedUser = await User.findByIdAndUpdate(userId, { profilePic: uploadResponse.secure_url }, { new: true })
+
+    return res.status(200).json(updatedUser)
+
+  } catch (error) {
+    console.log("Error in logout controller", error.message)
+    res.status(500).json({ message: "Internal Server Error" })
+  }
 }
