@@ -1,4 +1,5 @@
 import Message from "../models/message.model.js"
+import User from "../models/user.model.js"
 
 export const getUsers4Sidebar = async (req, res) => {
     try {
@@ -15,11 +16,16 @@ export const getUsers4Sidebar = async (req, res) => {
 
 export const getMessages = async (req, res) => {
     try {
-        const {id:userToChatId} = req.params
-        const LoggedInUserId=req.user._id
-        const messages= await Message.find({ _id: { $ne: loggedInUserId } }).select("-password")
+        const { id: userToChatId } = req.params
+        const LoggedInUserId = req.user._id
+        const messages = await Message.find({
+            $or: [
+                { senderId: LoggedInUserId , receiverId: userToChatId },
+                { senderId: userToChatId, receiverId:  LoggedInUserId  }
+            ]
+        })
 
-        res.status(200).json(filteredUsers)
+        res.status(200).json(messages)
     } catch (error) {
         console.log("Error in getUsers4Sidebarcontroller", error.message)
         res.status(500).json({ message: "Internal Server Error" })

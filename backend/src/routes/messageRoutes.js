@@ -7,8 +7,7 @@ const router=express.Router()
 
 router.get("/users",protectRoute,getUsers4Sidebar)
 router.post("/:id",protectRoute,getMessages)
-router.post("/logout",logout)
-router.put("/updateProfile",protectRoute,updateProfile)
-router.get("/checkAuth",protectRoute,checkAuth)
+router.post("/send/:id",protectRoute,sendMessage)
+
 
 export default router
