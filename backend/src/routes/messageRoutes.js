@@ -4,7 +4,7 @@ import { protectRoute } from "../middleware/protectRoute.js"
 
 const router=express.Router()
 
-router.post("/signup",signup)
+router.get("/users",protectRoute,getUsers4Sidebar)
 router.post("/login",login)
 router.post("/logout",logout)
 router.put("/updateProfile",protectRoute,updateProfile)
