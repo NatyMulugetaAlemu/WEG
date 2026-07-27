@@ -1,11 +1,12 @@
 import express from "express"
 import { checkAuth, login, logout, signup, updateProfile } from "../controllers/authControllers.js"
 import { protectRoute } from "../middleware/protectRoute.js"
+import { getUsers4Sidebar } from "../controllers/messageControllers.js"
 
 const router=express.Router()
 
 router.get("/users",protectRoute,getUsers4Sidebar)
-router.post("/login",login)
+router.post("/messages",getMessages)
 router.post("/logout",logout)
 router.put("/updateProfile",protectRoute,updateProfile)
 router.get("/checkAuth",protectRoute,checkAuth)
