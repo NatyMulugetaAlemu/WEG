@@ -1,16 +1,22 @@
 import React from 'react'
-import { Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import SignUpPage from './pages/SignUpPage'
+import LogInPage from './pages/LogInPage'
+import SettingsPage from './pages/SettingsPage'
+import ProfilePage from './pages/ProfilePage'
+import Navbar from "./components/Navbar"  
 
 const App = () => {
   return (
     <div>
-      <Navbar />
+      <Navbar/>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/" element={<SignUpPage />} />
-        <Route path="/" element={<LogInPage />} />
-        <Route path="/" element={<SettingsPage />} />
-        <Route path="/" element={<ProfilePage />} />
+        <Route path="/" element={<HomePage/>} />
+        <Route path="/signup" element={<SignUpPage/>} />
+        <Route path="/login" element={<LogInPage/>} />
+        <Route path="/setting" element={<SettingsPage/>} />
+        <Route path="/profile" element={<ProfilePage/>} />
       </Routes>
 
     </div>
