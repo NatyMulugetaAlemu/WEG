@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs"
 export const signup = async (req, res) => {
     const { username, email, password } = req.body
     try {
-        if (!username || email || password) {
+        if (!username || !email || !password) {
             res.status(400).json({ message: "All fields are required" })
         }
 
@@ -21,7 +21,7 @@ export const signup = async (req, res) => {
         }
 
         if (existingUsername) {
-            return res.status(400).json({ message: "usernamealready exists" })
+            return res.status(400).json({ message: "username already exists" })
         }
 
         const salt = await bcrypt.genSalt(10)
