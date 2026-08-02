@@ -34,7 +34,7 @@ export const signup = async (req, res) => {
         })
 
         if (user) {
-            const token = generateToken(user._id, res)
+            generateToken(user._id, res)
             await user.save()
 
             res.status(201).json({
@@ -55,9 +55,39 @@ export const signup = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-    res.send("login")
+    const { email, password } = req.body
+    try {
+        const user = user.findOne({ email })
+
+        if (!user) {
+            res.status(400).json({ message: "Invalid Credentials" })
+        }
+
+        const isPasswordCorrect = await.bcrypt.compare(password, user.password)
+        if (!isPasswordCorrect) {
+            res.status(400).json({ message: "Invalid Credentials" })
+        }
+
+        generateToken(user._id, res)
+        res.status(201).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            profilePic: user.profilePic
+        })
+
+    } catch (error) {
+        console.log("Eror in login controller", error.message)
+        res.status(500).json({ message: "Internal server error" })
+    }
 }
 
-export const logout = async (req, res) => {
-    res.send("logout")
-}
+export const logout = (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.log("Error in logout controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
