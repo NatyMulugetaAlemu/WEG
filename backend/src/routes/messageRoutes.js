@@ -5,6 +5,6 @@ import { protectRoute } from "../middleware/protectRoute"
 const router=express.Router()
 
 router.get("/users",protectRoute,getUsers4SideBar)
-router.get("messages",getMessages)
+router.get("/messages/:id",protectRoute,getMessages)
 
 export default router

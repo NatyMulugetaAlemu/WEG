@@ -1,4 +1,5 @@
-import User from "../models/user.model"
+import User from "../models/user.model.js"
+import Message from "../models/message.model.js"
 
 export const getUsers4SideBar = async () => {
     try {
@@ -11,7 +12,20 @@ export const getUsers4SideBar = async () => {
     }
 }
 export const getMessages = async () => {
+    try {
+        const { id: userToChatId } = req.params
+        const loggedInUserId = req.user._id
 
+        const messages = await Message.find({
+            $or:[
+                { senderId: loggedInUserId, recieverId: userToChatId },
+                { senderId: userToChatId, recieverId: loggedInUserId },
+            ]
+        })
+
+    } catch (error) {
+
+    }
 }
 
 export const getUsers4SideBar = async () => {
