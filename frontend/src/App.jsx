@@ -16,6 +16,8 @@ const App = () => {
   checkAuth()
  },[checkAuth])
 
+ console.log({authUser})
+
   return (
     <div>
       <Navbar />
