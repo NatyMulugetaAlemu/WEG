@@ -1,12 +1,4 @@
-// import React from 'react'
 
-// const LogInPage = () => {
-//   return (
-//     <div>LogInPage</div>
-//   )
-// }
-
-// export default LogInPage
 
 
 
@@ -146,7 +138,7 @@ const LogInPage = () => {
                   Loading...
                 </>
               ) : (
-                "Create Account"
+                "Log In"
               )}
             </button>
           </form>

@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 export const useAuthStore = create((set, get) => ({
     authUser: null,
     isLoggingIn: false,
-    isSigningUp:false,
+    isSigningUp: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
 
@@ -22,32 +22,30 @@ export const useAuthStore = create((set, get) => ({
     },
 
     signup: async (data) => {
+        set({ isSigningUp: true, })
         try {
-            set({ isLoading: true, })
             const res = await axiosInstance.post("/auth/signup", data)
             set({ authUser: res.data })
             toast.success("Account Created Sucessfully")
         } catch (error) {
             toast.error(error.response.data.message)
             console.log("Error in signup Store", error.message)
-            set({ authUser: null })
         } finally {
-            set({ isLoading: false, })
+            set({ isSigningUp: false, })
         }
     },
 
     login: async (data) => {
+        set({ isLoggingIn: true, })
         try {
-            set({ isLoading: true, })
             const res = await axiosInstance.post("/auth/login", data)
             set({ authUser: res.data })
             toast.success("Logged In Sucessfully")
         } catch (error) {
             toast.error(error.response.data.message)
-            console.log("Error in signup Store", error.message)
-            set({ authUser:res.data})
+            console.log("Error in login Store", error.message)
         } finally {
-            set({ isLoading: false, })
+            set({ isLoggingIn: false, })
         }
     },
 
@@ -59,8 +57,22 @@ export const useAuthStore = create((set, get) => ({
         } catch (error) {
             toast.error(error.response.data.message)
             console.log("Error in login Store", error.message)
-        } 
+        }
     },
+    updateProfile: async (data) => {
+        set({ isUpdatingProfile: true });
+        try {
+            const res = await axiosInstance.put("/auth/updateProfile", data);
+            set({ authUser: res.data });
+            toast.success("Profile updated successfully");
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log("error in update profile:", error);
+        } finally {
+            set({ isUpdatingProfile: false });
+        }
+    },
+
 }))
 
 
